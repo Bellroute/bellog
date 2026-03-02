@@ -37,14 +37,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html suppressHydrationWarning lang="ko">
       <body>
         <ThemeProvider>
+          <div aria-hidden="true" id="stars-background" />
           <header className="site-header">
             <div className="site-header-inner">
               <Link className="brand" href="/">
-                뜬눈으로 꾸는 꿈
+                뜬 눈으로 꾸는 꿈
               </Link>
               <nav className="nav">
-                <Link href="/">글</Link>
-                <Link href="/search">검색</Link>
+                <Link aria-label="검색" className="icon-button" href="/search" title="검색">
+                  <svg fill="none" height="20" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" width="20">
+                    <path d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </Link>
                 <ThemeToggle />
               </nav>
             </div>

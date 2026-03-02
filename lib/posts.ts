@@ -31,6 +31,16 @@ function normalizeTag(tag: string) {
   return tag.trim().toLowerCase();
 }
 
+function normalizeDate(value: unknown): string {
+  if (value instanceof Date) {
+    return value.toISOString().slice(0, 10);
+  }
+  if (typeof value === "string" && value.trim().length > 0) {
+    return value;
+  }
+  return "1970-01-01";
+}
+
 export function getAllPosts(): PostData[] {
   const files = listPostFiles();
 
@@ -44,7 +54,7 @@ export function getAllPosts(): PostData[] {
     return {
       title: data.title ?? slug,
       slug,
-      date: data.date ?? "1970-01-01",
+      date: normalizeDate(data.date),
       description: data.description ?? "",
       tags: Array.isArray(data.tags) ? data.tags.map(String).map(normalizeTag) : [],
       category: String(data.category ?? "general").toLowerCase(),
@@ -68,7 +78,7 @@ export function getPostBySlug(slug: string): PostData | null {
   return {
     title: data.title ?? slug,
     slug,
-    date: data.date ?? "1970-01-01",
+    date: normalizeDate(data.date),
     description: data.description ?? "",
     tags: Array.isArray(data.tags) ? data.tags.map(String).map(normalizeTag) : [],
     category: String(data.category ?? "general").toLowerCase(),
@@ -117,6 +127,14 @@ export function formatDate(dateString: string) {
     month: "long",
     day: "numeric"
   }).format(date);
+}
+
+export function formatCompactDate(dateString: string) {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}. ${month}. ${day}.`;
 }
 
 export function plainText(content: string) {
