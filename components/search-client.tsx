@@ -43,9 +43,9 @@ export function SearchClient({ items }: { items: SearchItem[] }) {
           </h3>
           <p>{item.description}</p>
           <div className="chip-row">
-            <span className="chip">{item.category}</span>
+            <span className="category-badge">{item.category}</span>
             {item.tags.map((tag) => (
-              <span className="chip" key={tag}>
+              <span className="tag-pill" key={tag}>
                 #{tag}
               </span>
             ))}

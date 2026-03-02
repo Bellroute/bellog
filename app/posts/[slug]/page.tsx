@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { formatDate, getAllPosts, getPostBySlug, renderMDX } from "@/lib/posts";
+import { displayCategory, formatDate, getAllPosts, getPostBySlug, renderMDX } from "@/lib/posts";
 import { siteConfig } from "@/lib/site-config";
 
 type Props = {
@@ -41,21 +41,33 @@ export default async function PostPage({ params }: Props) {
   const mdx = await renderMDX(post.content);
 
   return (
-    <article className="card prose">
-      <div className="meta">{formatDate(post.date)}</div>
-      <h1>{post.title}</h1>
-      <p>{post.description}</p>
-      <div className="chip-row">
-        <Link className="chip" href={`/categories/${post.category}`}>
-          {post.category}
+    <article className="post-detail">
+      <div className="post-detail-top">
+        <Link className="back-link" href="/">
+          ← 목록으로
         </Link>
-        {post.tags.map((tag) => (
-          <Link className="chip" href={`/tags/${tag}`} key={tag}>
-            #{tag}
-          </Link>
-        ))}
+        <div className="post-detail-meta">
+          <time className="meta" dateTime={post.date}>
+            {formatDate(post.date)}
+          </time>
+          <span className="post-meta-sep">/</span>
+          <span className="post-detail-category">{displayCategory(post.category)}</span>
+        </div>
       </div>
-      {mdx}
+
+      <header className="post-detail-header">
+        <h1 className="post-detail-title">{post.title}</h1>
+        {post.description ? <p className="post-detail-description">{post.description}</p> : null}
+        <div className="chip-row">
+          {post.tags.map((tag) => (
+            <Link className="tag-pill" href={`/tags/${tag}`} key={tag}>
+              #{tag}
+            </Link>
+          ))}
+        </div>
+      </header>
+
+      <section className="prose post-prose">{mdx}</section>
     </article>
   );
 }

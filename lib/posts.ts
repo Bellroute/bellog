@@ -31,6 +31,23 @@ function normalizeTag(tag: string) {
   return tag.trim().toLowerCase();
 }
 
+const categoryLabels: Record<string, string> = {
+  thoughts: "생각",
+  thought: "생각",
+  book: "독서",
+  books: "독서",
+  reading: "독서",
+  diary: "일상",
+  life: "일상",
+  daily: "일상",
+  notes: "기록",
+  record: "기록",
+  log: "기록",
+  dev: "테크",
+  tech: "테크",
+  engineering: "테크"
+};
+
 function normalizeDate(value: unknown): string {
   if (value instanceof Date) {
     return value.toISOString().slice(0, 10);
@@ -118,6 +135,10 @@ export function getAllTags(posts = getAllPosts()) {
 
 export function getAllCategories(posts = getAllPosts()) {
   return [...new Set(posts.map((post) => post.category))].sort();
+}
+
+export function displayCategory(category: string) {
+  return categoryLabels[category.toLowerCase()] ?? category;
 }
 
 export function formatDate(dateString: string) {

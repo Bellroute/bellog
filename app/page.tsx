@@ -1,4 +1,4 @@
-import { formatCompactDate, getAllPosts } from "@/lib/posts";
+import { displayCategory, formatCompactDate, getAllPosts } from "@/lib/posts";
 import Link from "next/link";
 
 type HomeProps = {
@@ -13,27 +13,9 @@ export default async function HomePage({ searchParams }: HomeProps) {
   const posts = getAllPosts();
   const pageSize = 10;
   const categories = ["생각", "독서", "일상", "기록", "테크"] as const;
-  const categoryMap: Record<string, string> = {
-    thoughts: "생각",
-    thought: "생각",
-    book: "독서",
-    books: "독서",
-    reading: "독서",
-    diary: "일상",
-    life: "일상",
-    daily: "일상",
-    notes: "기록",
-    record: "기록",
-    log: "기록",
-    dev: "테크",
-    tech: "테크",
-    engineering: "테크"
-  };
-
-  const getDisplayCategory = (raw: string) => categoryMap[raw.toLowerCase()] ?? raw;
   const activeCategory = category && categories.includes(category as (typeof categories)[number]) ? category : "all";
   const filteredPosts =
-    activeCategory === "all" ? posts : posts.filter((post) => getDisplayCategory(post.category) === activeCategory);
+    activeCategory === "all" ? posts : posts.filter((post) => displayCategory(post.category) === activeCategory);
   const totalPages = Math.max(1, Math.ceil(filteredPosts.length / pageSize));
   const parsedPage = Number.parseInt(page ?? "1", 10);
   const currentPage = Number.isNaN(parsedPage) ? 1 : Math.min(Math.max(parsedPage, 1), totalPages);
@@ -74,7 +56,7 @@ export default async function HomePage({ searchParams }: HomeProps) {
         {pagePosts.map((post) => (
           <Link className="post-row" href={`/posts/${post.slug}`} key={post.slug}>
             <span className="post-category">
-              {getDisplayCategory(post.category)}
+              {displayCategory(post.category)}
             </span>
             <h2 className="post-title">{post.title}</h2>
             <time className="post-date" dateTime={post.date}>

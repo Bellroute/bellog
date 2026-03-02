@@ -13,11 +13,11 @@ export function PostList({ posts }: { posts: PostMeta[] }) {
           </h2>
           <p>{post.description}</p>
           <div className="chip-row">
-            <Link className="chip" href={`/categories/${post.category}`}>
+            <Link className="category-badge" href={`/categories/${post.category}`}>
               {post.category}
             </Link>
             {post.tags.map((tag) => (
-              <Link className="chip" href={`/tags/${tag}`} key={tag}>
+              <Link className="tag-pill" href={`/tags/${tag}`} key={tag}>
                 #{tag}
               </Link>
             ))}
